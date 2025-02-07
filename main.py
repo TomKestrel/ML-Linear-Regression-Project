@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from numpy.distutils.system_info import djbfft_info
+
 from methods import *
 
 """
@@ -56,7 +58,8 @@ def calculate_cost_function(x, y, w, b):
                         |
                         v
     the prediction (y_hat) formula model for linear regression is:
-    
+
+    y_hat = f_subscript(w,b),(x[i]) = wx[i]+b (can also be written as mx[i]+b)
     y_hat = m*x + b
     y_hat = m*x[i] + b      # add [i] (indexes) to be able to iterate through all the values in column 1 in the data
     y_hat = m*x[i] + b      # note: y_hat IS the prediction value whereas just y is the actual supplied data
@@ -64,7 +67,7 @@ def calculate_cost_function(x, y, w, b):
     """
 
     # [Initializing Variables]
-    m = x.shape[0]                  # m = number of training examples
+    m = x.shape[0]                  # m = number of training examples that exist in the first column (which is what the 0 means)
     total_cost_function_value = 0   # f(w,b) will be denoted as total_cost_function_value
 
     for i in range(m):
@@ -73,6 +76,21 @@ def calculate_cost_function(x, y, w, b):
         total_cost_function_value += difference_squared_valued
     return total_cost_function_value
 #----------------------------------------------------------------------------------------------------------------------
+
+def calculate_gradient(x, y, w, b):
+    # this method will calculate the gradient (aka derivative) of both dj_db and dj_dw (thus this method will return
+    # dj_db and dj_dw)
+
+    # [Initializing Variables]
+    m = x.shape[0]                  # m = number of training examples that exist in the first column (which is what the 0 means)
+    dj_db = 0                       # the derivative with respect to b
+    dj_dw = 0                       # the derivative with respect to w
+
+    for i in range(m):
+        # self note: y_hat IS the model's prediction value
+        y_hat = m*x[i]+b
+        dj_db += (y_hat - y[i])         # this is the derivative of the cost function with respect to b
+        dj_dw += (y_hat - y[i])*x[i]    # this is the derivative of the cost function with respect to w
 
 
 
